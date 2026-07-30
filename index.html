@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>tattoo_pedrox — estúdio de tatuagem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black: #0b0b0b;
+    --black-2: #161614;
+    --black-3: #1f1f1c;
+    --bone: #ece6d8;
+    --bone-dim: #b8b2a4;
+    --gold: #f2c230;
+    --gold-dim: #c79a1e;
+    --blood: #7a1e1a;
+    --steel: #4a4a45;
+    --hair: rgba(236,230,216,0.12);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--black);
+    color:var(--bone);
+    font-family:'Archivo', sans-serif;
+    font-weight:400;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  h1,h2,h3, .display{
+    font-family:'Anton', sans-serif;
+    font-weight:400;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    color:var(--bone);
+  }
+  .mono{
+    font-family:'Space Mono', monospace;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{display:block; max-width:100%;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+
+  /* -------- lightning divider (signature element) -------- */
+  .bolt-divider{
+    width:100%;
+    height:46px;
+    display:block;
+  }
+  .bolt-divider path{
+    fill: var(--gold);
+  }
+  .bolt-divider.flip{ transform: scaleX(-1); }
+
+  /* -------- nav -------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    background:rgba(11,11,11,0.9);
+    border-bottom:1px solid var(--hair);
+    backdrop-filter:blur(6px);
+  }
+  nav.wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:76px;
+  }
+  .logo{
+    font-family:'Anton', sans-serif;
+    font-size:22px;
+    letter-spacing:1px;
+  }
+  .logo .under{color:var(--gold);}
+  .navlinks{display:flex; gap:34px;}
+  .navlinks a{
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--bone-dim);
+    transition:color .2s;
+  }
+  .navlinks a:hover{color:var(--gold);}
+  .nav-cta{
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    background:var(--gold);
+    color:var(--black);
+    padding:11px 20px;
+    font-weight:700;
+    border:2px solid var(--gold);
+    transition:background .2s, color .2s;
+  }
+  .nav-cta:hover{ background:transparent; color:var(--gold); }
+  .burger{display:none;}
+
+  /* -------- hero -------- */
+  .hero{
+    position:relative;
+    padding:170px 0 90px;
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(242,194,48,0.08), transparent 55%),
+      var(--black);
+    border-bottom:1px solid var(--hair);
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap:48px;
+    align-items:center;
+  }
+  .eyebrow{
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    letter-spacing:3px;
+    color:var(--gold);
+    text-transform:uppercase;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:22px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:26px; height:2px;
+    background:var(--gold);
+    display:inline-block;
+  }
+  .hero h1{
+    font-size:clamp(52px, 8vw, 96px);
+    line-height:0.95;
+  }
+  .hero h1 .accent{ color:var(--gold); }
+  .hero p.sub{
+    margin-top:22px;
+    max-width:460px;
+    color:var(--bone-dim);
+    font-size:16px;
+  }
+  .hero-ctas{
+    margin-top:36px;
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .btn-primary, .btn-ghost{
+    font-family:'Space Mono', monospace;
+    font-size:13px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    padding:16px 28px;
+    font-weight:700;
+    display:inline-block;
+    border:2px solid var(--gold);
+    transition:all .2s;
+  }
+  .btn-primary{ background:var(--gold); color:var(--black); }
+  .btn-primary:hover{ background:transparent; color:var(--gold); }
+  .btn-ghost{ background:transparent; color:var(--bone); border-color:var(--steel); }
+  .btn-ghost:hover{ border-color:var(--bone); }
+
+  .hero-visual{
+    position:relative;
+    border:1px solid var(--hair);
+    background:var(--black-2);
+    padding:10px;
+  }
+  .hero-visual img{ filter:grayscale(15%) contrast(1.05); width:100%; height:420px; object-fit:cover; }
+  .hero-visual .tag{
+    position:absolute; bottom:22px; left:22px;
+    background:var(--black);
+    border:1px solid var(--gold);
+    padding:8px 14px;
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--gold);
+  }
+
+  .stat-row{
+    margin-top:60px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    border-top:1px solid var(--hair);
+    border-bottom:1px solid var(--hair);
+  }
+  .stat{
+    padding:22px 20px;
+    border-right:1px solid var(--hair);
+  }
+  .stat:last-child{border-right:none;}
+  .stat .num{
+    font-family:'Anton', sans-serif;
+    font-size:34px;
+    color:var(--gold);
+  }
+  .stat .lbl{
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--bone-dim);
+    margin-top:4px;
+  }
+
+  /* -------- section headers -------- */
+  section{ padding:100px 0; }
+  .sec-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-bottom:56px;
+    flex-wrap:wrap;
+    gap:20px;
+    border-bottom:1px solid var(--hair);
+    padding-bottom:28px;
+  }
+  .sec-head h2{ font-size:clamp(34px,4.5vw,54px); }
+  .sec-head .eyebrow{margin-bottom:10px;}
+  .sec-head p{ max-width:380px; color:var(--bone-dim); font-size:14.5px; }
+
+  /* -------- gallery -------- */
+  .gallery{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:2px;
+    background:var(--hair);
+  }
+  .gcard{
+    position:relative;
+    background:var(--black);
+    overflow:hidden;
+  }
+  .gcard img{
+    width:100%; height:460px; object-fit:cover;
+    filter:grayscale(20%);
+    transition:transform .5s ease, filter .5s ease;
+  }
+  .gcard:hover img{ transform:scale(1.06); filter:grayscale(0%); }
+  .gcard .info{
+    position:absolute; left:0; right:0; bottom:0;
+    padding:22px;
+    background:linear-gradient(to top, rgba(0,0,0,0.92), transparent);
+  }
+  .gcard .info .num{
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    color:var(--gold);
+    letter-spacing:1px;
+  }
+  .gcard .info h3{
+    font-size:22px;
+    margin-top:6px;
+  }
+  .gcard .info p{
+    font-size:12.5px;
+    color:var(--bone-dim);
+    margin-top:4px;
+  }
+
+  /* -------- estilos / services -------- */
+  .styles-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:var(--hair);
+  }
+  .style-card{
+    background:var(--black);
+    padding:34px 26px;
+    transition:background .2s;
+  }
+  .style-card:hover{ background:var(--black-2); }
+  .style-card .mark{
+    font-family:'Space Mono', monospace;
+    color:var(--gold);
+    font-size:12px;
+    letter-spacing:1px;
+  }
+  .style-card h3{ font-size:19px; margin-top:14px; }
+  .style-card p{ font-size:13px; color:var(--bone-dim); margin-top:10px; }
+
+  /* -------- process -------- */
+  .process{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:0;
+  }
+  .proc-step{
+    position:relative;
+    padding:0 24px 0 0;
+  }
+  .proc-step:not(:last-child)::after{
+    content:"";
+    position:absolute; top:0; right:0;
+    width:1px; height:100%;
+    background:var(--hair);
+  }
+  .proc-step .idx{
+    font-family:'Anton', sans-serif;
+    font-size:44px;
+    color:var(--black-3);
+    -webkit-text-stroke:1px var(--gold);
+    color:transparent;
+  }
+  .proc-step h3{ font-size:17px; margin-top:16px; }
+  .proc-step p{ font-size:13.5px; color:var(--bone-dim); margin-top:10px; }
+
+  /* -------- booking -------- */
+  .booking{
+    background:var(--black-2);
+    border-top:1px solid var(--hair);
+    border-bottom:1px solid var(--hair);
+  }
+  .booking-grid{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:60px;
+  }
+  .booking-side h2{ font-size:clamp(32px,4vw,48px); }
+  .booking-side p{ color:var(--bone-dim); margin-top:18px; max-width:380px; font-size:14.5px; }
+  .booking-info{ margin-top:38px; }
+  .booking-info .row{
+    display:flex; gap:14px;
+    padding:16px 0;
+    border-top:1px solid var(--hair);
+    font-size:13.5px;
+  }
+  .booking-info .row .k{
+    font-family:'Space Mono', monospace;
+    color:var(--gold);
+    min-width:110px;
+    font-size:12px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+  }
+
+  form{
+    background:var(--black);
+    border:1px solid var(--hair);
+    padding:40px;
+  }
+  .field{ margin-bottom:22px; }
+  .field label{
+    display:block;
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--bone-dim);
+    margin-bottom:9px;
+  }
+  .field input, .field select, .field textarea{
+    width:100%;
+    background:var(--black-2);
+    border:1px solid var(--steel);
+    color:var(--bone);
+    padding:13px 14px;
+    font-family:'Archivo', sans-serif;
+    font-size:14px;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{
+    outline:none;
+    border-color:var(--gold);
+  }
+  .field textarea{ resize:vertical; min-height:90px; }
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .submit-btn{
+    width:100%;
+    background:var(--gold);
+    color:var(--black);
+    border:2px solid var(--gold);
+    font-family:'Space Mono', monospace;
+    font-weight:700;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    padding:17px;
+    font-size:13.5px;
+    cursor:pointer;
+    transition:all .2s;
+  }
+  .submit-btn:hover{ background:transparent; color:var(--gold); }
+  .form-note{
+    font-size:11.5px;
+    color:var(--bone-dim);
+    margin-top:14px;
+    font-family:'Space Mono', monospace;
+  }
+
+  /* -------- footer -------- */
+  footer{ padding:70px 0 40px; }
+  .foot-grid{
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1fr;
+    gap:50px;
+    padding-bottom:40px;
+    border-bottom:1px solid var(--hair);
+  }
+  .foot-grid h3{
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:18px;
+  }
+  .foot-grid p, .foot-grid a{
+    font-size:13.5px;
+    color:var(--bone-dim);
+    display:block;
+    margin-bottom:10px;
+  }
+  .foot-grid a:hover{ color:var(--gold); }
+  .foot-bottom{
+    display:flex; justify-content:space-between;
+    padding-top:26px;
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    color:var(--steel);
+    flex-wrap:wrap;
+    gap:10px;
+  }
+
+  @media (max-width: 860px){
+    .navlinks{display:none;}
+    .hero-grid{grid-template-columns:1fr;}
+    .stat-row{grid-template-columns:repeat(2,1fr);}
+    .stat:nth-child(2){border-right:none;}
+    .gallery{grid-template-columns:1fr;}
+    .styles-grid{grid-template-columns:1fr 1fr;}
+    .process{grid-template-columns:1fr 1fr; row-gap:36px;}
+    .proc-step:nth-child(2)::after{display:none;}
+    .booking-grid{grid-template-columns:1fr;}
+    .row2{grid-template-columns:1fr;}
+    .foot-grid{grid-template-columns:1fr; gap:30px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <div class="logo">tattoo<span class="under">_</span>pedrox</div>
+    <div class="navlinks">
+      <a href="#trabalhos">Trabalhos</a>
+      <a href="#estilos">Estilos</a>
+      <a href="#processo">Processo</a>
+      <a href="#agendar">Agendar</a>
+    </div>
+    <a href="#agendar" class="nav-cta">Agendar sessão</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Estúdio · São Paulo</div>
+        <h1>TINTA PESADA.<br>AGULHA <span class="accent">CERTEIRA.</span></h1>
+        <p class="sub">tattoo_pedrox transforma referência em traço definitivo — realismo, blackwork e traços autorais na pele. Cada peça é única, feita sob medida, sem atalho.</p>
+        <div class="hero-ctas">
+          <a href="#agendar" class="btn-primary">Agendar minha tattoo</a>
+          <a href="#trabalhos" class="btn-ghost">Ver trabalhos</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="assets/tattoo-tigre.png" alt="Tatuagem de tigre em blackwork realista no braço">
+        <div class="tag">Blackwork · Realismo</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="num">500+</div><div class="lbl">Sessões fechadas</div></div>
+      <div class="stat"><div class="num">8</div><div class="lbl">Anos de agulha</div></div>
+      <div class="stat"><div class="num">4.9</div><div class="lbl">Nota média</div></div>
+      <div class="stat"><div class="num">100%</div><div class="lbl">Material esterilizado</div></div>
+    </div>
+  </div>
+</section>
+
+<svg class="bolt-divider" viewBox="0 0 1200 46" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0,0 L1200,0 L1200,46 L680,46 L740,20 L610,20 L520,46 L0,46 Z"></path>
+</svg>
+
+<section id="trabalhos">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow">Portfólio</div>
+        <h2>Trabalho que já saiu da agulha</h2>
+      </div>
+      <p>Uma amostra do que sai da máquina: traço fino, sombra pesada e composição que respeita o corpo.</p>
+    </div>
+  </div>
+  <div class="gallery">
+    <div class="gcard">
+      <img src="assets/tattoo-rosa.png" alt="Tatuagem de rosa com espinhos nas costas">
+      <div class="info">
+        <div class="num">01 / fineline</div>
+        <h3>Rosa &amp; espinho</h3>
+        <p>Costas · traço fino com sombreado leve</p>
+      </div>
+    </div>
+    <div class="gcard">
+      <img src="assets/tattoo-sol.png" alt="Tatuagem de sol com rosto e mariposa na coxa">
+      <div class="info">
+        <div class="num">02 / autoral</div>
+        <h3>Sol &amp; mariposa</h3>
+        <p>Coxa · ilustração autoral em blackwork</p>
+      </div>
+    </div>
+    <div class="gcard">
+      <img src="assets/tattoo-tigre.png" alt="Tatuagem de tigre realista no braço">
+      <div class="info">
+        <div class="num">03 / realismo</div>
+        <h3>Tigre</h3>
+        <p>Braço · realismo em preto e cinza</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<svg class="bolt-divider flip" viewBox="0 0 1200 46" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0,0 L1200,0 L1200,46 L680,46 L740,20 L610,20 L520,46 L0,46 Z"></path>
+</svg>
+
+<section id="estilos">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow">Especialidades</div>
+        <h2>Estilos que a casa domina</h2>
+      </div>
+      <p>Se não tá na lista, manda a referência do mesmo jeito — a gente conversa e vê se encaixa.</p>
+    </div>
+  </div>
+  <div class="styles-grid">
+    <div class="style-card">
+      <div class="mark">01</div>
+      <h3>Fineline &amp; botânico</h3>
+      <p>Traço fino, flores e composições delicadas com sombreado sutil.</p>
+    </div>
+    <div class="style-card">
+      <div class="mark">02</div>
+      <h3>Blackwork autoral</h3>
+      <p>Ilustração forte, contraste alto, peças únicas desenhadas do zero.</p>
+    </div>
+    <div class="style-card">
+      <div class="mark">03</div>
+      <h3>Realismo p&amp;b</h3>
+      <p>Retratos e animais com profundidade real, camada por camada.</p>
+    </div>
+    <div class="style-card">
+      <div class="mark">04</div>
+      <h3>Cover-up</h3>
+      <p>Tatuagem antiga que não te representa mais? A gente cobre com estilo.</p>
+    </div>
+  </div>
+</section>
+
+<section id="processo">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow">Como funciona</div>
+        <h2>Da ideia à pele</h2>
+      </div>
+      <p>Quatro passos, sem enrolação, do primeiro contato até a tattoo fechada.</p>
+    </div>
+    <div class="process">
+      <div class="proc-step">
+        <div class="idx">01</div>
+        <h3>Conversa &amp; referência</h3>
+        <p>Você manda ideia, tamanho e local do corpo pelo formulário ou WhatsApp.</p>
+      </div>
+      <div class="proc-step">
+        <div class="idx">02</div>
+        <h3>Orçamento &amp; data</h3>
+        <p>Pedrox retorna com valor estimado e horários disponíveis na agenda.</p>
+      </div>
+      <div class="proc-step">
+        <div class="idx">03</div>
+        <h3>Desenho fechado</h3>
+        <p>Ajustes finais do desenho antes de subir na maca — sem surpresa no dia.</p>
+      </div>
+      <div class="proc-step">
+        <div class="idx">04</div>
+        <h3>Sessão &amp; cuidado</h3>
+        <p>Tattoo feita com material esterilizado + orientação completa de cicatrização.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<svg class="bolt-divider" viewBox="0 0 1200 46" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0,0 L1200,0 L1200,46 L680,46 L740,20 L610,20 L520,46 L0,46 Z"></path>
+</svg>
+
+<section class="booking" id="agendar">
+  <div class="wrap">
+    <div class="booking-grid">
+      <div class="booking-side">
+        <div class="eyebrow">Agendamento</div>
+        <h2>Marca sua sessão</h2>
+        <p>Preenche o formulário com sua ideia — ao enviar, abre direto no WhatsApp do estúdio com tudo já preenchido.</p>
+        <div class="booking-info">
+          <div class="row"><div class="k">Endereço</div><div>São Paulo, SP — endereço exato enviado após confirmação</div></div>
+          <div class="row"><div class="k">Horário</div><div>Ter a sáb, 11h às 20h</div></div>
+          <div class="row"><div class="k">WhatsApp</div><div>(11) 90000-0000</div></div>
+          <div class="row"><div class="k">Sinal</div><div>Reserva de horário com sinal, abatido no valor final</div></div>
+        </div>
+      </div>
+
+      <form id="bookingForm">
+        <div class="field">
+          <label for="nome">Nome completo</label>
+          <input type="text" id="nome" name="nome" placeholder="Seu nome" required>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="whatsapp">WhatsApp</label>
+            <input type="tel" id="whatsapp" name="whatsapp" placeholder="(11) 90000-0000" required>
+          </div>
+          <div class="field">
+            <label for="data">Data preferida</label>
+            <input type="date" id="data" name="data">
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="estilo">Estilo desejado</label>
+            <select id="estilo" name="estilo">
+              <option>Fineline / botânico</option>
+              <option>Blackwork autoral</option>
+              <option>Realismo p&amp;b</option>
+              <option>Cover-up</option>
+              <option>Ainda não sei</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="local">Local do corpo</label>
+            <input type="text" id="local" name="local" placeholder="Ex: braço, costas, coxa">
+          </div>
+        </div>
+        <div class="field">
+          <label for="msg">Descreva sua ideia</label>
+          <textarea id="msg" name="msg" placeholder="Conte a ideia, tamanho aproximado e referências"></textarea>
+        </div>
+        <button type="submit" class="submit-btn">Enviar via WhatsApp</button>
+        <p class="form-note">Ao enviar, você será redirecionado ao WhatsApp com sua mensagem pronta.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="logo" style="margin-bottom:16px;">tattoo<span class="under">_</span>pedrox</div>
+        <p style="max-width:320px;">Estúdio de tatuagem em São Paulo. Traço autoral, técnica pesada e respeito total pela pele de quem senta na cadeira.</p>
+      </div>
+      <div>
+        <h3>Contato</h3>
+        <a href="#">WhatsApp: (11) 90000-0000</a>
+        <a href="#">contato@tattoopedrox.com.br</a>
+        <a href="#">@tattoo_pedrox</a>
+      </div>
+      <div>
+        <h3>Estúdio</h3>
+        <p>Ter a sáb, 11h às 20h</p>
+        <p>São Paulo, SP</p>
+        <a href="#agendar">Agendar sessão →</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 tattoo_pedrox. Todos os direitos reservados.</span>
+      <span>18+ · Documento com foto obrigatório</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('bookingForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const nome = document.getElementById('nome').value.trim();
+    const whatsapp = document.getElementById('whatsapp').value.trim();
+    const data = document.getElementById('data').value;
+    const estilo = document.getElementById('estilo').value;
+    const local = document.getElementById('local').value.trim();
+    const msg = document.getElementById('msg').value.trim();
+
+    let text = `Fala, tattoo_pedrox! Quero agendar uma sessão.\n`;
+    text += `Nome: ${nome}\n`;
+    text += `Contato: ${whatsapp}\n`;
+    if(data) text += `Data preferida: ${data}\n`;
+    text += `Estilo: ${estilo}\n`;
+    if(local) text += `Local do corpo: ${local}\n`;
+    if(msg) text += `Ideia: ${msg}\n`;
+
+    const phone = "5511900000000";
+    const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+  });
+</script>
+
+</body>
+</html>
